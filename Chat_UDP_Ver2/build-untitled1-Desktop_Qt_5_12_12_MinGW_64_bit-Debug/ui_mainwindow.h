@@ -33,22 +33,24 @@ public:
     QPushButton *selectPortButton;
     QLabel *portLabel;
     QLabel *ourPortLabel;
+    QPushButton *switchPacketSize;
+    QLabel *packetSizeLabel;
 
     void setupUi(QMainWindow *MainWindow)
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-        MainWindow->resize(499, 400);
-        MainWindow->setMinimumSize(QSize(499, 400));
-        MainWindow->setMaximumSize(QSize(499, 400));
+        MainWindow->resize(499, 420);
+        MainWindow->setMinimumSize(QSize(499, 420));
+        MainWindow->setMaximumSize(QSize(499, 420));
         action_2 = new QAction(MainWindow);
         action_2->setObjectName(QString::fromUtf8("action_2"));
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         SendingData = new QPushButton(centralwidget);
         SendingData->setObjectName(QString::fromUtf8("SendingData"));
-        SendingData->setGeometry(QRect(400, 370, 100, 31));
-        SendingData->setMinimumSize(QSize(100, 31));
+        SendingData->setGeometry(QRect(431, 370, 69, 31));
+        SendingData->setMinimumSize(QSize(69, 31));
         SendingData->setMaximumSize(QSize(100, 31));
         textEdit = new QTextEdit(centralwidget);
         textEdit->setObjectName(QString::fromUtf8("textEdit"));
@@ -59,7 +61,7 @@ public:
 "color: rgb(255, 255, 255);"));
         inputTextEdit = new QTextEdit(centralwidget);
         inputTextEdit->setObjectName(QString::fromUtf8("inputTextEdit"));
-        inputTextEdit->setGeometry(QRect(90, 370, 311, 31));
+        inputTextEdit->setGeometry(QRect(0, 370, 431, 31));
         inputTextEdit->setMinimumSize(QSize(311, 31));
         inputTextEdit->setMaximumSize(QSize(16777215, 31));
         selectFile = new QPushButton(centralwidget);
@@ -83,9 +85,26 @@ public:
         portLabel->setStyleSheet(QString::fromUtf8("color: rgb(255, 255, 255);"));
         ourPortLabel = new QLabel(centralwidget);
         ourPortLabel->setObjectName(QString::fromUtf8("ourPortLabel"));
-        ourPortLabel->setGeometry(QRect(400, 350, 81, 16));
+        ourPortLabel->setGeometry(QRect(390, 350, 91, 16));
         ourPortLabel->setStyleSheet(QString::fromUtf8("color: rgb(255, 255, 255);"));
+        switchPacketSize = new QPushButton(centralwidget);
+        switchPacketSize->setObjectName(QString::fromUtf8("switchPacketSize"));
+        switchPacketSize->setGeometry(QRect(90, 380, 16, 16));
+        packetSizeLabel = new QLabel(centralwidget);
+        packetSizeLabel->setObjectName(QString::fromUtf8("packetSizeLabel"));
+        packetSizeLabel->setGeometry(QRect(10, 350, 131, 16));
+        packetSizeLabel->setStyleSheet(QString::fromUtf8("color: rgb(255, 255, 255);"));
         MainWindow->setCentralWidget(centralwidget);
+        switchPacketSize->raise();
+        selectPortButton->raise();
+        pushButton->raise();
+        selectFile->raise();
+        SendingData->raise();
+        textEdit->raise();
+        inputTextEdit->raise();
+        portLabel->raise();
+        ourPortLabel->raise();
+        packetSizeLabel->raise();
 
         retranslateUi(MainWindow);
         QObject::connect(pushButton, SIGNAL(clicked()), textEdit, SLOT(clear()));
@@ -106,6 +125,8 @@ public:
         selectPortButton->setText(QApplication::translate("MainWindow", "Port", nullptr));
         portLabel->setText(QApplication::translate("MainWindow", "\320\237\320\276\321\200\321\202 \321\201\320\276\320\261\320\265\321\201\320\265\320\264\320\275\320\270\320\272\320\260", nullptr));
         ourPortLabel->setText(QApplication::translate("MainWindow", "\320\241\320\276\320\261\321\201\321\202\320\262\320\265\320\275\320\275\321\213\320\271", nullptr));
+        switchPacketSize->setText(QApplication::translate("MainWindow", "Packet", nullptr));
+        packetSizeLabel->setText(QApplication::translate("MainWindow", "\320\237\320\260\320\272\320\265\321\202\321\213 \321\201 \320\274\321\203\321\201\320\276\321\200\320\276\320\274", nullptr));
     } // retranslateUi
 
 };
