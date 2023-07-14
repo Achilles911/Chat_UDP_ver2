@@ -17,10 +17,14 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+
 public slots:
     void ReadingData();
     QString CountingDate();
     QString FotoProfil(int a);
+    bool IsFilePacket(const QByteArray datagram);
+    void SaveFile(const QByteArray& datagram);
+
 
 
 private slots:
@@ -30,12 +34,13 @@ private slots:
     void on_pushButton_clicked();
 
     void on_switchPacketSize_clicked();
-    void on_fileLink_clicked(const QString& filePath);
+    void on_fileLink_clicked(const QUrl &url);
 private:
     Ui::MainWindow *ui;
     QUdpSocket *udpSocket;
     int selectedPort = 9000;
     int packetsize = 32;
+    int numberFile = 0;
 
 
 };

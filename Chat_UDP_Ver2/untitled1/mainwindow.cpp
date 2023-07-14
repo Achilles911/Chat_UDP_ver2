@@ -4,11 +4,7 @@
 #include <QFileDialog>
 #include <QInputDialog>
 #include <QToolBar>
-#include <QTemporaryFile>
-#include <QDesktopServices>
-#include <QTextEdit>
-
-
+#include <QMessageBox>
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -26,44 +22,31 @@ MainWindow::MainWindow(QWidget *parent)
     ui->textEdit->setReadOnly(true);//блокировка текствоика
     ui->portLabel->setText("Port: " + QString::number(selectedPort));//автоматический лабель
     ui->packetSizeLabel->setText("Рaзмер пакетов: " + QString::number(packetsize));//автоматический лабель
+    // Добавление действий в тулбар
     QAction *changePortAction = new QAction("Изменить порт собеседника", this);
     QAction *clearTextAction = new QAction("Очистить текстовое поле", this);
     QAction *selectFileAction = new QAction("Выбрать файл", this);
     QAction *switchPacketSizeAction = new QAction("Изменить размер пакетов", this);
-
-    // Добавление действий в тулбар
     QToolBar *toolBar = new QToolBar(this);
     toolBar->addAction(changePortAction);
     toolBar->addAction(clearTextAction);
     toolBar->addAction(selectFileAction);
     toolBar->addAction(switchPacketSizeAction);
     addToolBar(toolBar);
-
-    // Обработчик нажатия на кнопку изменения порта
     connect(changePortAction, &QAction::triggered, this, &MainWindow::on_selectPortButton_clicked);
-
-    // Обработчик нажатия на кнопку очистки текста
     connect(clearTextAction, &QAction::triggered, this, &MainWindow::on_pushButton_clicked);
-
-    // Обработчик нажатия на кнопку выбора файла
     connect(selectFileAction, &QAction::triggered, this, &MainWindow::on_selectFile_clicked);
-
     connect(switchPacketSizeAction, &QAction::triggered, this, &MainWindow::on_switchPacketSize_clicked);
-
-
+    //  Конец ToolBar
 
 }
-
-
 MainWindow::~MainWindow()
 {
     delete ui;
 }
 
 void MainWindow::ReadingData()//вызывается при получении данных
-{
-
-
+{ 
     int i = 0;//счетчик пакетов
     QString information = CountingDate();
     QString prefix = FotoProfil(0);
@@ -73,23 +56,56 @@ void MainWindow::ReadingData()//вызывается при получении �
         QByteArray datagram; //объект класса
         datagram.resize(udpSocket->pendingDatagramSize());//подгон размера под дату
         udpSocket->readDatagram(datagram.data(), datagram.size());//считывание в массив
-        if (i == 0)//условие 1 пакета
+
+
+        if(IsFilePacket(datagram))//проверка на файл
         {
-            if(!QString(datagram).isEmpty())
-                ui->textEdit->append(prefix + "<font color=#71aaeb>Собеседник: </font>" + QString(datagram));//дроп текста
+            datagram.remove(0, 5);
+            //ui->textEdit->append("хуйня работает");
+            SaveFile(datagram); // сохранялка
+            ui->textEdit->append(prefix + "<font color=#71aaeb>Получен файл: </font>" + "Документ " + QString::number(numberFile - 1));
+        }
+        else
+        {
+            if (i == 0)//условие 1 пакета
+            {
+
+                if(!QString(datagram).isEmpty())
+                    ui->textEdit->append(prefix + "<font color=#71aaeb>Собеседник: </font>" + QString(datagram));//дроп текста
+            }
+
+            else
+                ui->textEdit->insertPlainText(QString(datagram));//сумма текста подряд
         }
 
-        else
-            ui->textEdit->insertPlainText(QString(datagram));//сумма текста подряд
+
         if(!QString(datagram).isEmpty())//проверка наличия сообщений
-        i++;
+            i++;
     }
     if(i)//ошибка пустоты
-     ui->textEdit->append(information);
+        ui->textEdit->append(information);
 }
 
+bool MainWindow::IsFilePacket(const QByteArray datagram)//проверОчка
+{
+    const QString filePrefix = "FILE⋠";
+    return QString(datagram).startsWith(filePrefix);
 
+}
 
+void MainWindow::SaveFile(const QByteArray& datagram)
+{
+    QString saveFilePath = QFileDialog::getSaveFileName(this, tr("Сохранить файл"), "Документ " + QString::number(numberFile));
+    if (!saveFilePath.isEmpty())
+    {
+        QFile file(saveFilePath);
+        if (file.open(QIODevice::WriteOnly))
+        {
+            file.write(datagram);
+            file.close();
+        }
+    }
+    numberFile += 1;}
 
 void MainWindow::on_SendingData_clicked()//отправка
 {
@@ -105,7 +121,7 @@ void MainWindow::on_SendingData_clicked()//отправка
 
         int numPackets = (data.size() + packetsize - 1) / packetsize;
         for (int i = 0; i < numPackets; ++i) {
-            QByteArray packet = data.mid(i * packetsize, packetsize);  // Получаем фрагмент данных
+            QByteArray packet = data.mid(i * packetsize, packetsize);
             udpSocket->writeDatagram(packet, QHostAddress::LocalHost, selectedPort);//отправка даты
         }
         QString information = CountingDate();
@@ -121,43 +137,26 @@ void MainWindow::on_selectFile_clicked()//выборка и отправка ф�
 {
     QString filePath = QFileDialog::getOpenFileName(this, "Выберите файл");//файловый путь
 
-        if (!filePath.isEmpty()) {//проверка пустоты
+    QString prefix = FotoProfil(1);
+    QString information = CountingDate();
 
-            QFile file(filePath);//объект с путем
+    if (!filePath.isEmpty()) {//проверка пустоты
 
-            if (file.open(QIODevice::ReadOnly)) {//открытие файла для чтения
+        QFile file(filePath);//объект с путем
 
-                QFileInfo fileInfo(file.fileName());
-                QByteArray fileData = file.readAll();//чтение
+        if (file.open(QIODevice::ReadOnly)) {//открытие файла для чтения
 
-                QString fileName = fileInfo.fileName();
-                QString fileInfoStr = fileName + "\n" + QString::number(fileData.size());
-                QByteArray packet = fileInfoStr.toUtf8() + fileData;
-                udpSocket->writeDatagram(packet, QHostAddress::LocalHost, selectedPort);
-
-                QTemporaryFile tempFile;
-                if (tempFile.open()) {
-                    tempFile.write(fileData);
-                    tempFile.flush();
-                    tempFile.close();
-
-
-                    // Отображение ссылки на временный файл в окне чата
-                    QString tempFilePath = tempFile.fileName();
-                    QString fileLink = "<a href=\"" + tempFilePath + "\">" + fileInfo.fileName() + "</a>";
-                    ui->textEdit->append(fileLink);
-
-                    connect(ui->textEdit, &QTextEdit::anchorClicked, this, [this](const QUrl& url) {
-                        if (url.isLocalFile()) {
-                            QString filePath = url.toLocalFile();
-                            on_fileLink_clicked(filePath);
-                        }
-                    });
-                    }
-
-                file.close();//поток закрыт
-            }
+            QByteArray fileData = file.readAll();//чтение
+            QByteArray packet = "FILE⋠" + fileData;
+            QFileInfo fileInfo(file.fileName());
+            QString fileName = fileInfo.fileName();
+            udpSocket->writeDatagram(packet, QHostAddress::LocalHost, selectedPort);
+            file.close();//поток закрыт
+            ui->textEdit->append(prefix + "<font color=#71aaeb>Отправлен документ: </font>" + '"' + fileName + '"');
+            ui->textEdit->append(QString(information));
         }
+    }
+
 }
 
 QString MainWindow::CountingDate()//добавление доп информации по сообщениям
@@ -215,8 +214,21 @@ void MainWindow::on_switchPacketSize_clicked()//изменение размер�
     }
 }
 
-void MainWindow::on_fileLink_clicked(const QString& filePath)
+void MainWindow::on_fileLink_clicked(const QUrl &url)//открытие и сохранение файла по ссылке
 {
-    QDesktopServices::saveFile(filePath);
-}
+    QString filePath = url.toString();
 
+
+    QString savePath = QFileDialog::getSaveFileName(this, "Сохранить файл", "", "All Files (*)");//окно сохранения
+
+    if (!savePath.isEmpty()) {
+
+        if (QFile::copy(filePath, savePath)) {// копирование файла в выбранное место и окна ответа
+
+            QMessageBox::information(this, "Все хорошо.", "Файл сохранен.");
+        } else {
+
+            QMessageBox::warning(this, "Есть проблемка с сохранением.", "Не получилось, не фортануло.");
+        }
+    }
+}
