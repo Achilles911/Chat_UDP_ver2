@@ -28,34 +28,48 @@ void MainWindow::ReadingData()//вызывается при получении �
     int i = 0;//счетчик пакетов
     QString dateTime = CountingDate();
     QString photo = PhotoProfile(0);
-    while (udpSocket->hasPendingDatagrams())//выполнение до конца датаграмм
+
+
+
+    QByteArray fileDatagram;
+    QByteArray datagram; //объект класса
+    datagram.resize(udpSocket->pendingDatagramSize());//подгон размера под дату
+    udpSocket->readDatagram(datagram.data(), datagram.size());
+
+    if (IsFilePacket(datagram))//проверка на файл
     {
-        QByteArray datagram; //объект класса
-        datagram.resize(udpSocket->pendingDatagramSize());//подгон размера под дату
-        udpSocket->readDatagram(datagram.data(), datagram.size());//считывание в массив
-        if(IsFilePacket(datagram))//проверка на файл
+        i++;
+        datagram.remove(0, 7);
+
+        fileDatagram += datagram;
+        while (udpSocket->hasPendingDatagrams())//выполнение до конца датаграмм
         {
-            datagram.remove(0, 7);
-            //ui->textEdit->append("хуйня работает");
-            datagram = SaveFile(datagram); // сохранялка
-            ui->textEdit->append(photo + "<font color=#71aaeb>Получен файл: </font>" + nameFile);
+            datagram.resize(udpSocket->pendingDatagramSize());//подгон размера под дату
+            udpSocket->readDatagram(datagram.data(), datagram.size());
+            fileDatagram += datagram;
         }
-        else
+
+        datagram = SaveFile(fileDatagram); // сохранялка
+        ui->textEdit->append(photo + "<font color=#71aaeb>Получен файл: </font>" + nameFile);
+
+
+    }
+    else
+    {
+
+        if (!QString(datagram).isEmpty())
         {
-            if (i == 0)//условие 1 пакета
+            ui->textEdit->append(photo + "<font color=#71aaeb>Собеседник: </font>" + QString(datagram));//дроп текста
+            i++;
+            while (udpSocket->hasPendingDatagrams())//выполнение до конца датаграмм
             {
+                datagram.resize(udpSocket->pendingDatagramSize());//подгон размера под дату
+                udpSocket->readDatagram(datagram.data(), datagram.size());
 
                 if(!QString(datagram).isEmpty())
-                    ui->textEdit->append(photo + "<font color=#71aaeb>Собеседник: </font>" + QString(datagram));//дроп текста
+                    ui->textEdit->insertPlainText(QString(datagram));//сумма текста подряд
             }
-
-            else
-                ui->textEdit->insertPlainText(QString(datagram));//сумма текста подряд
         }
-
-
-        if(!QString(datagram).isEmpty())//проверка наличия сообщений
-            i++;
     }
     if(i)//ошибка пустоты
         ui->textEdit->append(dateTime);
@@ -66,16 +80,20 @@ bool MainWindow::IsFilePacket(const QByteArray datagram)//проверОчка
     const QString filephoto = "FILE⋠";
     return QString(datagram).startsWith(filephoto);
 
+
 }
 
 QByteArray MainWindow::SaveFile(QByteArray& datagram)
 {
-    int Name = datagram.indexOf("Ω");//выявление имени и удаление имени из файла
+    //выявление имени и удаление имени из файла
+    QString aboba = QString::fromUtf8(datagram);
+    int Name = aboba.indexOf("Ω");
     if (Name != +1)
     {
-        nameFile = datagram.left(Name);
-        datagram.remove(0, Name - 1);
+        nameFile = aboba.left(Name);
+        aboba.remove(0, Name + 1);
     }
+
 
 
     QString SaveFilePath = QFileDialog::getSaveFileName(this, tr("Сохранить файл"), nameFile);
@@ -84,10 +102,12 @@ QByteArray MainWindow::SaveFile(QByteArray& datagram)
         QFile file(SaveFilePath);
         if (file.open(QIODevice::WriteOnly))
         {
-            file.write(datagram);
+            file.write(aboba.toUtf8());
             file.close();
+            ui->textEdit->append(aboba.toUtf8());
         }
     }
+
     return datagram;
 }
 
@@ -98,12 +118,12 @@ void MainWindow::on_SendingData_clicked()//отправка
     QString photo = PhotoProfile(1);
     QString dateTime = CountingDate();
     if (!text.isEmpty())
-       {
-           int numPackets = qCeil(static_cast<double>(text.size()) / packetsize);
-           for (int i = 0; i < numPackets; ++i) {
-               QString packet = text.mid(i * packetsize, packetsize);
-               udpSocket->writeDatagram(packet.toUtf8(), QHostAddress::LocalHost, selectedPort);
-           }
+    {
+        int numPackets = qCeil(static_cast<double>(text.size()) / packetsize);
+        for (int i = 0; i < numPackets; ++i) {
+            QString packet = text.mid(i * packetsize, packetsize);
+            udpSocket->writeDatagram(packet.toUtf8(), QHostAddress::LocalHost, selectedPort);
+        }
         ui->textEdit->append(photo + "<font color=#71aaeb>Вы: </font>" +  QString(text));//вывод отправленного текста в свой чат
         ui->textEdit->append(dateTime);
         ui->inputTextEdit->clear();//очистка строки ввода
@@ -111,7 +131,8 @@ void MainWindow::on_SendingData_clicked()//отправка
 
 }
 
-void MainWindow::on_selectFile_clicked()//выборка и отправка файла
+void MainWindow::on_selectFile_clicked()//выборка и отправка файла !! ТРЕБУЕТСЯ ИСПРАВИТЬ СОХРАНЕНИЕ ИЛИ ОТПРАВКУ ПАКЕТОВ ФАЙЛА, ЧТОБЫ БЕЗ ИЕРОГЛИФОВ !!!|| ИСПРАВЛЕНО
+
 {
     QString filePath = QFileDialog::getOpenFileName(this, "Выберите файл");//файловый путь
     QString photo = PhotoProfile(1);
@@ -123,9 +144,24 @@ void MainWindow::on_selectFile_clicked()//выборка и отправка ф�
 
             QFileInfo fileInfo(file.fileName());
             QString fileName = fileInfo.fileName();
-            QByteArray packet = "FILE⋠" + fileName.toUtf8() + "Ω" + fileData;
-            udpSocket->writeDatagram(packet, QHostAddress::LocalHost, selectedPort);
+            QByteArray oldpacket = fileData;
+            int numPacketsData = qCeil(static_cast<double>(oldpacket.size()) / packetsize);
+            QString numData = QString::number(numPacketsData);
+            QByteArray info = "FILE⋠" + fileName.toUtf8() + "Ω" + numData.toUtf8() + "Ω";
+            int numPacketInfo = qCeil(static_cast<double>(info.size()) / packetsize);
+
+            QByteArray packet = "FILE⋠" +fileName.toUtf8() + "Ω" +  fileData;//здесь первым идет количество пакетов !! нужно переделать обработку пакетов!!// ИСПРАВЛЕНО
+
+            int numPackets = numPacketInfo + numPacketsData;
+
+            for (int i = 0; i < numPackets; ++i) {
+                QByteArray packets = packet.mid(i * packetsize, packetsize);
+
+                udpSocket->writeDatagram(packets, QHostAddress::LocalHost, selectedPort);
+            }
+           //Здесь все хорошо, работает правильно!!!
             file.close();//поток закрыт
+
             ui->textEdit->append(photo + "<font color=#71aaeb>Отправлен документ: </font>" + '"' + fileName + '"');
             ui->textEdit->append(QString(dateTime));
         }

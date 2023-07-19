@@ -228,6 +228,27 @@ debug/moc_mainwindow.cpp: ../untitled1/mainwindow.h \
 		../../../QtCreator/5.12.12/mingw73_64/include/QtNetwork/qtnetwork-config.h \
 		../../../QtCreator/5.12.12/mingw73_64/include/QtNetwork/qabstractsocket.h \
 		../../../QtCreator/5.12.12/mingw73_64/include/QtNetwork/qhostaddress.h \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtCore/QDateTime \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtCore/qdatetime.h \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtWidgets/QFileDialog \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtWidgets/qfiledialog.h \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtCore/qdir.h \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtCore/qfileinfo.h \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtWidgets/qdialog.h \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtWidgets/QInputDialog \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtWidgets/qinputdialog.h \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtWidgets/qlineedit.h \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtWidgets/qframe.h \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtGui/qtextcursor.h \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtGui/qtextformat.h \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtGui/qpen.h \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtGui/qtextoption.h \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtWidgets/QMessageBox \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtWidgets/qmessagebox.h \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtCore/QtMath \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtCore/qmath.h \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtCore/QThread \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtCore/qthread.h \
 		debug/moc_predefs.h \
 		../../../QtCreator/5.12.12/mingw73_64/bin/moc.exe
 	D:\QtCreator\5.12.12\mingw73_64\bin\moc.exe $(DEFINES) --include "D:/Qt project/Chat_UDP_Ver2/build-untitled1-Desktop_Qt_5_12_12_MinGW_64_bit-Debug/debug/moc_predefs.h" -ID:/QtCreator/5.12.12/mingw73_64/mkspecs/win32-g++ -I"D:/Qt project/Chat_UDP_Ver2/untitled1" -ID:/QtCreator/5.12.12/mingw73_64/include -ID:/QtCreator/5.12.12/mingw73_64/include/QtWidgets -ID:/QtCreator/5.12.12/mingw73_64/include/QtGui -ID:/QtCreator/5.12.12/mingw73_64/include/QtANGLE -ID:/QtCreator/5.12.12/mingw73_64/include/QtNetwork -ID:/QtCreator/5.12.12/mingw73_64/include/QtCore -I. -ID:/QtCreator/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++ -ID:/QtCreator/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/x86_64-w64-mingw32 -ID:/QtCreator/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include/c++/backward -ID:/QtCreator/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include -ID:/QtCreator/Tools/mingw730_64/lib/gcc/x86_64-w64-mingw32/7.3.0/include-fixed -ID:/QtCreator/Tools/mingw730_64/x86_64-w64-mingw32/include ..\untitled1\mainwindow.h -o debug\moc_mainwindow.cpp
@@ -368,6 +389,27 @@ debug/main.o: ../untitled1/main.cpp ../untitled1/mainwindow.h \
 		../../../QtCreator/5.12.12/mingw73_64/include/QtNetwork/qtnetwork-config.h \
 		../../../QtCreator/5.12.12/mingw73_64/include/QtNetwork/qabstractsocket.h \
 		../../../QtCreator/5.12.12/mingw73_64/include/QtNetwork/qhostaddress.h \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtCore/QDateTime \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtCore/qdatetime.h \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtWidgets/QFileDialog \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtWidgets/qfiledialog.h \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtCore/qdir.h \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtCore/qfileinfo.h \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtWidgets/qdialog.h \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtWidgets/QInputDialog \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtWidgets/qinputdialog.h \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtWidgets/qlineedit.h \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtWidgets/qframe.h \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtGui/qtextcursor.h \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtGui/qtextformat.h \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtGui/qpen.h \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtGui/qtextoption.h \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtWidgets/QMessageBox \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtWidgets/qmessagebox.h \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtCore/QtMath \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtCore/qmath.h \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtCore/QThread \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtCore/qthread.h \
 		../../../QtCreator/5.12.12/mingw73_64/include/QtWidgets/QApplication \
 		../../../QtCreator/5.12.12/mingw73_64/include/QtWidgets/qapplication.h \
 		../../../QtCreator/5.12.12/mingw73_64/include/QtCore/qcoreapplication.h \
@@ -490,6 +532,27 @@ debug/mainwindow.o: ../untitled1/mainwindow.cpp ../untitled1/mainwindow.h \
 		../../../QtCreator/5.12.12/mingw73_64/include/QtNetwork/qtnetwork-config.h \
 		../../../QtCreator/5.12.12/mingw73_64/include/QtNetwork/qabstractsocket.h \
 		../../../QtCreator/5.12.12/mingw73_64/include/QtNetwork/qhostaddress.h \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtCore/QDateTime \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtCore/qdatetime.h \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtWidgets/QFileDialog \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtWidgets/qfiledialog.h \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtCore/qdir.h \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtCore/qfileinfo.h \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtWidgets/qdialog.h \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtWidgets/QInputDialog \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtWidgets/qinputdialog.h \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtWidgets/qlineedit.h \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtWidgets/qframe.h \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtGui/qtextcursor.h \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtGui/qtextformat.h \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtGui/qpen.h \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtGui/qtextoption.h \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtWidgets/QMessageBox \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtWidgets/qmessagebox.h \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtCore/QtMath \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtCore/qmath.h \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtCore/QThread \
+		../../../QtCreator/5.12.12/mingw73_64/include/QtCore/qthread.h \
 		ui_mainwindow.h \
 		../../../QtCreator/5.12.12/mingw73_64/include/QtCore/QVariant \
 		../../../QtCreator/5.12.12/mingw73_64/include/QtWidgets/QAction \
@@ -504,7 +567,6 @@ debug/mainwindow.o: ../untitled1/mainwindow.cpp ../untitled1/mainwindow.h \
 		../../../QtCreator/5.12.12/mingw73_64/include/QtGui/qinputmethod.h \
 		../../../QtCreator/5.12.12/mingw73_64/include/QtWidgets/QLabel \
 		../../../QtCreator/5.12.12/mingw73_64/include/QtWidgets/qlabel.h \
-		../../../QtCreator/5.12.12/mingw73_64/include/QtWidgets/qframe.h \
 		../../../QtCreator/5.12.12/mingw73_64/include/QtWidgets/QPushButton \
 		../../../QtCreator/5.12.12/mingw73_64/include/QtWidgets/qpushbutton.h \
 		../../../QtCreator/5.12.12/mingw73_64/include/QtWidgets/qabstractbutton.h \
@@ -512,21 +574,7 @@ debug/mainwindow.o: ../untitled1/mainwindow.cpp ../untitled1/mainwindow.h \
 		../../../QtCreator/5.12.12/mingw73_64/include/QtWidgets/qtextedit.h \
 		../../../QtCreator/5.12.12/mingw73_64/include/QtWidgets/qabstractscrollarea.h \
 		../../../QtCreator/5.12.12/mingw73_64/include/QtGui/qtextdocument.h \
-		../../../QtCreator/5.12.12/mingw73_64/include/QtGui/qtextoption.h \
-		../../../QtCreator/5.12.12/mingw73_64/include/QtGui/qtextcursor.h \
-		../../../QtCreator/5.12.12/mingw73_64/include/QtGui/qtextformat.h \
-		../../../QtCreator/5.12.12/mingw73_64/include/QtGui/qpen.h \
-		../../../QtCreator/5.12.12/mingw73_64/include/QtWidgets/QWidget \
-		../../../QtCreator/5.12.12/mingw73_64/include/QtCore/QTime \
-		../../../QtCreator/5.12.12/mingw73_64/include/QtCore/qdatetime.h \
-		../../../QtCreator/5.12.12/mingw73_64/include/QtWidgets/QFileDialog \
-		../../../QtCreator/5.12.12/mingw73_64/include/QtWidgets/qfiledialog.h \
-		../../../QtCreator/5.12.12/mingw73_64/include/QtCore/qdir.h \
-		../../../QtCreator/5.12.12/mingw73_64/include/QtCore/qfileinfo.h \
-		../../../QtCreator/5.12.12/mingw73_64/include/QtWidgets/qdialog.h \
-		../../../QtCreator/5.12.12/mingw73_64/include/QtWidgets/QInputDialog \
-		../../../QtCreator/5.12.12/mingw73_64/include/QtWidgets/qinputdialog.h \
-		../../../QtCreator/5.12.12/mingw73_64/include/QtWidgets/qlineedit.h
+		../../../QtCreator/5.12.12/mingw73_64/include/QtWidgets/QWidget
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\mainwindow.o ..\untitled1\mainwindow.cpp
 
 debug/qrc_resource.o: debug/qrc_resource.cpp 
