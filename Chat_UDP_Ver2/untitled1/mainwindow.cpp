@@ -10,7 +10,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     udpSocket = new QUdpSocket(this); // создание экземпляра сокета
     qsrand(QTime::currentTime().msec());//рандомайзер
-    int port = 9000 + qrand() % 1000;
+    int port = 9000 + qrand() % 1000;//пределы рандома
     ui->ourPortLabel->setText("Ваш port: " + QString::number(port));//лабель вывод порта
     udpSocket->bind(QHostAddress::LocalHost, port);//привязка к адрессу и порту
     connect(udpSocket,SIGNAL(readyRead()),this,SLOT(ReadingData()));//октрытие метода ридингдaта
@@ -28,9 +28,6 @@ void MainWindow::ReadingData()//вызывается при получении �
     int i = 0;//счетчик пакетов
     QString dateTime = CountingDate();
     QString photo = PhotoProfile(0);
-
-
-
     QByteArray fileDatagram;
     QByteArray datagram; //объект класса
     datagram.resize(udpSocket->pendingDatagramSize());//подгон размера под дату
@@ -104,7 +101,7 @@ QByteArray MainWindow::SaveFile(QByteArray& datagram)
         {
             file.write(aboba.toUtf8());
             file.close();
-            ui->textEdit->append(aboba.toUtf8());
+
         }
     }
 
@@ -131,7 +128,7 @@ void MainWindow::on_SendingData_clicked()//отправка
 
 }
 
-void MainWindow::on_selectFile_clicked()//выборка и отправка файла !! ТРЕБУЕТСЯ ИСПРАВИТЬ СОХРАНЕНИЕ ИЛИ ОТПРАВКУ ПАКЕТОВ ФАЙЛА, ЧТОБЫ БЕЗ ИЕРОГЛИФОВ !!!|| ИСПРАВЛЕНО
+void MainWindow::on_selectFile_clicked()//выборка и отправка файла
 
 {
     QString filePath = QFileDialog::getOpenFileName(this, "Выберите файл");//файловый путь
@@ -150,7 +147,7 @@ void MainWindow::on_selectFile_clicked()//выборка и отправка ф�
             QByteArray info = "FILE⋠" + fileName.toUtf8() + "Ω" + numData.toUtf8() + "Ω";
             int numPacketInfo = qCeil(static_cast<double>(info.size()) / packetsize);
 
-            QByteArray packet = "FILE⋠" +fileName.toUtf8() + "Ω" +  fileData;//здесь первым идет количество пакетов !! нужно переделать обработку пакетов!!// ИСПРАВЛЕНО
+            QByteArray packet = "FILE⋠" +fileName.toUtf8() + "Ω" +  fileData;
 
             int numPackets = numPacketInfo + numPacketsData;
 

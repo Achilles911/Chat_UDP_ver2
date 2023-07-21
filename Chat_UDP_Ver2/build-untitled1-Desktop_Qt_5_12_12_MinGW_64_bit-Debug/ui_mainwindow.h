@@ -39,7 +39,7 @@ public:
     QHBoxLayout *horizontalLayout_2;
     QTextEdit *inputTextEdit;
     QPushButton *SendingData;
-    QWidget *widget;
+    QWidget *layoutWidget1;
     QHBoxLayout *horizontalLayout_3;
     QLabel *portLabel;
     QLabel *ourPortLabel;
@@ -95,7 +95,7 @@ public:
 
         layoutWidget = new QWidget(centralwidget);
         layoutWidget->setObjectName(QString::fromUtf8("layoutWidget"));
-        layoutWidget->setGeometry(QRect(0, 430, 439, 43));
+        layoutWidget->setGeometry(QRect(0, 430, 440, 43));
         horizontalLayout_2 = new QHBoxLayout(layoutWidget);
         horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
         horizontalLayout_2->setContentsMargins(0, 0, 0, 0);
@@ -112,36 +112,34 @@ public:
 
         horizontalLayout_2->addWidget(SendingData);
 
-        widget = new QWidget(centralwidget);
-        widget->setObjectName(QString::fromUtf8("widget"));
-        widget->setGeometry(QRect(20, 30, 421, 20));
-        horizontalLayout_3 = new QHBoxLayout(widget);
+        layoutWidget1 = new QWidget(centralwidget);
+        layoutWidget1->setObjectName(QString::fromUtf8("layoutWidget1"));
+        layoutWidget1->setGeometry(QRect(20, 30, 421, 20));
+        horizontalLayout_3 = new QHBoxLayout(layoutWidget1);
         horizontalLayout_3->setObjectName(QString::fromUtf8("horizontalLayout_3"));
         horizontalLayout_3->setContentsMargins(0, 0, 0, 0);
-        portLabel = new QLabel(widget);
+        portLabel = new QLabel(layoutWidget1);
         portLabel->setObjectName(QString::fromUtf8("portLabel"));
 
         horizontalLayout_3->addWidget(portLabel);
 
-        ourPortLabel = new QLabel(widget);
+        ourPortLabel = new QLabel(layoutWidget1);
         ourPortLabel->setObjectName(QString::fromUtf8("ourPortLabel"));
         ourPortLabel->setStyleSheet(QString::fromUtf8("color: rgb(0, 0, 0);"));
 
         horizontalLayout_3->addWidget(ourPortLabel);
 
-        packetSizeLabel = new QLabel(widget);
+        packetSizeLabel = new QLabel(layoutWidget1);
         packetSizeLabel->setObjectName(QString::fromUtf8("packetSizeLabel"));
         packetSizeLabel->setStyleSheet(QString::fromUtf8("color: rgb(0, 0, 0);"));
 
         horizontalLayout_3->addWidget(packetSizeLabel);
 
         MainWindow->setCentralWidget(centralwidget);
+        layoutWidget->raise();
         textEdit->raise();
         groupBox->raise();
         layoutWidget->raise();
-        ourPortLabel->raise();
-        packetSizeLabel->raise();
-        portLabel->raise();
 
         retranslateUi(MainWindow);
 

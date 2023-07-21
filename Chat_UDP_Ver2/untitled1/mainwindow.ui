@@ -127,7 +127,7 @@ color: rgb(255, 255, 255);</string>
      <rect>
       <x>0</x>
       <y>430</y>
-      <width>439</width>
+      <width>440</width>
       <height>43</height>
      </rect>
     </property>
@@ -163,7 +163,7 @@ color: rgb(255, 255, 255);</string>
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -202,12 +202,10 @@ color: rgb(255, 255, 255);</string>
      </item>
     </layout>
    </widget>
+   <zorder>layoutWidget</zorder>
    <zorder>textEdit</zorder>
    <zorder>groupBox</zorder>
    <zorder>layoutWidget</zorder>
-   <zorder>ourPortLabel</zorder>
-   <zorder>packetSizeLabel</zorder>
-   <zorder>portLabel</zorder>
   </widget>
   <action name="action_2">
    <property name="text">
