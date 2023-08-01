@@ -251,6 +251,7 @@ Makefile: ../untitled1/untitled1.pro ../../../QT/5.12.12/mingw73_64/mkspecs/win3
 		../../../QT/5.12.12/mingw73_64/lib/Qt5Widgets.prl \
 		../../../QT/5.12.12/mingw73_64/lib/Qt5Gui.prl \
 		../../../QT/5.12.12/mingw73_64/lib/Qt5Network.prl \
+		../../../QT/5.12.12/mingw73_64/lib/Qt5Sql.prl \
 		../../../QT/5.12.12/mingw73_64/lib/Qt5Core.prl \
 		../../../QT/5.12.12/mingw73_64/lib/qtmain.prl
 	$(QMAKE) -o Makefile ..\untitled1\untitled1.pro -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug"
@@ -442,6 +443,7 @@ Makefile: ../untitled1/untitled1.pro ../../../QT/5.12.12/mingw73_64/mkspecs/win3
 ../../../QT/5.12.12/mingw73_64/lib/Qt5Widgets.prl:
 ../../../QT/5.12.12/mingw73_64/lib/Qt5Gui.prl:
 ../../../QT/5.12.12/mingw73_64/lib/Qt5Network.prl:
+../../../QT/5.12.12/mingw73_64/lib/Qt5Sql.prl:
 ../../../QT/5.12.12/mingw73_64/lib/Qt5Core.prl:
 ../../../QT/5.12.12/mingw73_64/lib/qtmain.prl:
 qmake: FORCE

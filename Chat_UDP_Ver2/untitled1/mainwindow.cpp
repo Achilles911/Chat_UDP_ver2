@@ -46,7 +46,7 @@ void MainWindow::ReadingData()//вызывается при получении �
         {
             fileDatagram.remove(fileDatagram.length()-3, 3);
             datagram = SaveFile(fileDatagram); // сохранялка
-            ui->textEdit->append(photo + "<font color=#71aaeb>Получен файл: </font>" + nameFile);
+            ui->textEdit->append(photo + "<font color=#71aaeb>Получен файл: </font>" + "'" + nameFile + "'");
             ui->textEdit->append(dateTime);
         }
     }
@@ -103,18 +103,19 @@ void MainWindow::on_SendingData_clicked()//отправка
     QString text = ui->inputTextEdit->toPlainText();//присваение в текст - текста написанного
     QString photo = PhotoProfile(1);
     QString dateTime = CountingDate();
-
     if (!text.isEmpty())
     {
-        textPackets = text;
-        sentTextPackets = 0;
-        numTextPackets = qCeil(static_cast<double>(text.size()) / packetsize);
-        static QTimer textTimer;
-        connect(&textTimer, &QTimer::timeout, this, [this]() {
-            sendingPackets(1);
-        });
-        textTimer.start(frequency);
-        textPackets = text;
+        messageQueue.push_back(text);
+        if (messageQueue.size() == 1)
+        {
+            sentTextPackets = 0;
+            numTextPackets = qCeil(static_cast<double>(text.size()) / packetsize);
+            static QTimer textTimer;
+            connect(&textTimer, &QTimer::timeout, this, [this]() {
+                sendingPackets(1);
+            });
+            textTimer.start(frequency);
+        }
         ui->textEdit->append(photo + "<font color=#71aaeb>Вы: </font>" +  QString(text));//вывод отправленного текста в свой чат
         ui->textEdit->append(dateTime);
         ui->inputTextEdit->clear();//очистка строки ввода
@@ -132,14 +133,18 @@ void MainWindow::on_selectFile_clicked()//выборка и отправка ф�
             QByteArray fileData = file.readAll();//чтение
             QFileInfo fileInfo(file.fileName());
             QString fileName = fileInfo.fileName();
+            fileQueue.push_back(fileName.toUtf8() + "Ω" +  fileData);
             filePackets = fileName.toUtf8() + "Ω" +  fileData;
-            sentFilePackets = 0;
-            numFilePackets = qCeil(static_cast<double>(filePackets.size()) / packetsize);
-            static QTimer fileTimer;
-            connect(&fileTimer, &QTimer::timeout, this, [this]() {
-                sendingPackets(2);
-            });
-            fileTimer.start(frequency);
+            if (fileQueue.size() == 1)
+            {
+                sentFilePackets = 0;
+                numFilePackets = qCeil(static_cast<double>(filePackets.size()) / packetsize);
+                static QTimer fileTimer;
+                connect(&fileTimer, &QTimer::timeout, this, [this]() {
+                    sendingPackets(2);
+                });
+                fileTimer.start(frequency);
+            }
             ui->textEdit->append(photo + "<font color=#71aaeb>Отправлен документ: </font>" + '"' + fileName + '"');
             ui->textEdit->append(QString(dateTime));
             file.close();//поток закрыт
@@ -149,44 +154,67 @@ void MainWindow::on_selectFile_clicked()//выборка и отправка ф�
 
 void MainWindow::sendingPackets(int choice)
 {
-    switch(choice){
-    case(1)://сообщения
+    switch (choice)
     {
-        if (!textPackets.isEmpty() && sentTextPackets < numTextPackets)
+    case 1://сообщения
+    {
+        if (!messageQueue.empty())
         {
-            QString packet = textPackets.mid(sentTextPackets * packetsize, packetsize);
-            if (!sentTextPackets)
-                packet = "SMS" + packet;
-            if (sentTextPackets == numTextPackets - 1)
-                packet += "EOS";
-            udpSocket->writeDatagram(packet.toUtf8(), QHostAddress::LocalHost, selectedPort);
-            ++sentTextPackets;
+            QString textPackets = messageQueue.front();
+            if (sentTextPackets < numTextPackets)
+            {
+                QString packet = textPackets.mid(sentTextPackets * packetsize, packetsize);
+                if (!sentTextPackets)
+                    packet = "SMS" + packet;
+                if (sentTextPackets == numTextPackets - 1)
+                    packet += "EOS";
+                udpSocket->writeDatagram(packet.toUtf8(), QHostAddress::LocalHost, selectedPort);
+                ++sentTextPackets;
+            }
+            else
+            {
+                messageQueue.pop_front();
+                sentTextPackets = 0;
+            }
         }
         else
         {
-            QTimer::singleShot(0, this, []() {
+            QTimer::singleShot(0, this, []()
+            {
                 static QTimer textTimer;
                 textTimer.stop();
             });
         }
+        break;
     }
 
     case (2)://файл
     {
-        if (sentFilePackets < numFilePackets)
+        if (!fileQueue.empty())
         {
-            QByteArray packet = filePackets.mid(sentFilePackets * packetsize, packetsize);
-            if (!sentFilePackets)
-                packet = "FILE⋠" + packet;
+            QByteArray filePackets = fileQueue.front();
+            if (sentFilePackets < numFilePackets)
+            {
+                QByteArray packet = filePackets.mid(sentFilePackets * packetsize, packetsize);
+                if (!sentFilePackets)
+                    packet = "FILE⋠" + packet;
+                else
+                    packet = "FILE" + packet;
+                if (sentFilePackets == numFilePackets - 1)
+                    packet += "EOF";
+                udpSocket->writeDatagram(packet, QHostAddress::LocalHost, selectedPort);
+                ++sentFilePackets;
+            }
             else
-                packet = "FILE" + packet;
-            if (sentFilePackets == numFilePackets - 1)
-                packet += "EOF";
-            udpSocket->writeDatagram(packet, QHostAddress::LocalHost, selectedPort);
-            ++sentFilePackets;
+            {
+                fileQueue.pop_front();
+                sentFilePackets = 0;
+            }
         }
-        else {
-            QTimer::singleShot(0, this, []() {
+        else
+        {
+            QTimer::singleShot(0, this, []()
+            {
                 static QTimer fileTimer;
                 fileTimer.stop();
             });
@@ -211,7 +239,6 @@ QString MainWindow::CountingDate()//добавление доп информац
     QString dateTime;
     dateTime += QDateTime::currentDateTime().toString();
     return dateTime;
-
 }
 
 QString MainWindow::PhotoProfile(int a)//фотографии

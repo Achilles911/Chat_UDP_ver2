@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QtSql>
+#include <QSqlDatabase>
 #include <QUdpSocket>
 #include <QDateTime>
 #include <QFileDialog>
@@ -10,6 +12,7 @@
 #include <QtMath>
 #include <QThread>
 #include <QTimer>
+#include <queue>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -50,13 +53,14 @@ private:
     QString nameFile;
     QByteArray fileDatagram;
     int frequency = 100;
-    QString textPackets;
     QByteArray filePackets;
     int sentTextPackets;
     int sentFilePackets;
     int numTextPackets = 0;
     int numFilePackets = 0;
     QString receivedPacket;
+    QQueue<QString> messageQueue;
+    QQueue<QByteArray> fileQueue;
 
 
 
