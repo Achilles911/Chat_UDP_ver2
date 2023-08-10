@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>493</width>
-    <height>480</height>
+    <height>510</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -232,10 +232,38 @@ color: rgb(255, 255, 255);</string>
      </item>
     </layout>
    </widget>
+   <widget class="QCheckBox" name="debugCheckBox">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>480</y>
+      <width>91</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string> Debug set.</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="packetLabel">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>480</y>
+      <width>81</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>PacketLabel</string>
+    </property>
+   </widget>
    <zorder>layoutWidget</zorder>
    <zorder>textEdit</zorder>
    <zorder>groupBox</zorder>
    <zorder>layoutWidget</zorder>
+   <zorder>debugCheckBox</zorder>
+   <zorder>packetLabel</zorder>
   </widget>
   <action name="action_2">
    <property name="text">

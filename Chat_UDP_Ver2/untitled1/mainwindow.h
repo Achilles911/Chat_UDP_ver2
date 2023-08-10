@@ -33,6 +33,8 @@ public slots:
     QString PhotoProfile(int a);
     QByteArray SaveFile(QByteArray& datagram);
     void sendingPackets(int choise);
+    void updateLabel();
+
 
 
 
@@ -43,6 +45,8 @@ private slots:
     void on_pushButton_clicked();
     void on_switchPacketSize_clicked();
     void on_selectFrequency_clicked();
+    void on_debugCheckBox_stateChanged(int arg1);
+
 
 private:
     Ui::MainWindow *ui;
@@ -61,6 +65,9 @@ private:
     QString receivedPacket;
     QQueue<QString> messageQueue;
     QQueue<QByteArray> fileQueue;
+    bool isDebug = false;
+
+
 
 
 

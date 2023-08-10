@@ -12,6 +12,7 @@
 #include <QtCore/QVariant>
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
@@ -46,12 +47,14 @@ public:
     QLabel *ourPortLabel;
     QLabel *packetSizeLabel;
     QLabel *frequencyLabel;
+    QCheckBox *debugCheckBox;
+    QLabel *packetLabel;
 
     void setupUi(QMainWindow *MainWindow)
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-        MainWindow->resize(493, 480);
+        MainWindow->resize(493, 510);
         MainWindow->setMinimumSize(QSize(493, 480));
         action_2 = new QAction(MainWindow);
         action_2->setObjectName(QString::fromUtf8("action_2"));
@@ -152,11 +155,19 @@ public:
 
         infoPanel->addWidget(frequencyLabel);
 
+        debugCheckBox = new QCheckBox(centralwidget);
+        debugCheckBox->setObjectName(QString::fromUtf8("debugCheckBox"));
+        debugCheckBox->setGeometry(QRect(10, 480, 91, 21));
+        packetLabel = new QLabel(centralwidget);
+        packetLabel->setObjectName(QString::fromUtf8("packetLabel"));
+        packetLabel->setGeometry(QRect(110, 480, 81, 16));
         MainWindow->setCentralWidget(centralwidget);
         layoutWidget->raise();
         textEdit->raise();
         groupBox->raise();
         layoutWidget->raise();
+        debugCheckBox->raise();
+        packetLabel->raise();
 
         retranslateUi(MainWindow);
 
@@ -180,6 +191,8 @@ public:
         ourPortLabel->setText(QApplication::translate("MainWindow", "\320\241\320\276\320\261\321\201\321\202\320\262\320\265\320\275\320\275\321\213\320\271", nullptr));
         packetSizeLabel->setText(QApplication::translate("MainWindow", "\320\237\320\260\320\272\320\265\321\202\321\213 \321\201 \320\274\321\203\321\201\320\276\321\200\320\276\320\274", nullptr));
         frequencyLabel->setText(QApplication::translate("MainWindow", "\320\247\320\260\321\201\321\202\320\276\321\202\320\260 \320\277\320\260\320\272\320\265\321\202\320\276\320\262", nullptr));
+        debugCheckBox->setText(QApplication::translate("MainWindow", " Debug set.", nullptr));
+        packetLabel->setText(QApplication::translate("MainWindow", "PacketLabel", nullptr));
     } // retranslateUi
 
 };

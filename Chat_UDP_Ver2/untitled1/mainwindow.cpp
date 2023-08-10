@@ -17,6 +17,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->textEdit->setReadOnly(true);//блокировка текствоика
     ui->portLabel->setText("Port: " + QString::number(selectedPort));//автоматический лабель
     ui->packetSizeLabel->setText("Рaзмер пакетов: " + QString::number(packetsize));//автоматический лабель
+    ui->packetLabel->setVisible(false);
+
 }
 MainWindow::~MainWindow()
 {
@@ -24,7 +26,7 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::ReadingData()//вызывается при получении данных
-{ 
+{
     QString dateTime = CountingDate();
     QString photo = PhotoProfile(0);
     QByteArray datagram; //объект класса
@@ -44,6 +46,7 @@ void MainWindow::ReadingData()//вызывается при получении �
         }
         if (QString(datagram).endsWith("EOF", Qt::CaseInsensitive))
         {
+
             fileDatagram.remove(fileDatagram.length()-3, 3);
             datagram = SaveFile(fileDatagram); // сохранялка
             ui->textEdit->append(photo + "<font color=#71aaeb>Получен файл: </font>" + "'" + nameFile + "'");
@@ -71,28 +74,32 @@ void MainWindow::ReadingData()//вызывается при получении �
 QByteArray MainWindow::SaveFile(QByteArray& datagram)
 {
     //выявление имени и удаление имени из файла
-    QString aboba = QString::fromUtf8(datagram);
-    int Name = aboba.indexOf("Ω");
-    if (Name != +1)
+
+    QByteArray aboba = datagram;
+    int name = aboba.indexOf("Ω");
+
+    if (name != -1)
     {
-        nameFile = aboba.left(Name);
-        aboba.remove(0, Name + 1);
+        nameFile = aboba.left(name);
+        aboba.remove(0, name + 1);
     }
+    aboba = QByteArray::fromBase64(aboba);
+
     QString SaveFilePath = QFileDialog::getSaveFileName(this, tr("Сохранить файл"), nameFile);
     if (!SaveFilePath.isEmpty())
     {
         QFile file(SaveFilePath);
         if (file.open(QIODevice::WriteOnly))
         {
-            file.write(aboba.toUtf8());
+            file.write(aboba);
             file.close();
-            QString packet = "Файл был сохранен '" +  nameFile + "'";
+            QString packet = "SMSФайл '" +  nameFile + "' был сохранен  EOS";
             udpSocket->writeDatagram(packet.toUtf8(), QHostAddress::LocalHost, selectedPort);
         }
     }
     else
     {
-        QString packet = "Файл не был сохранен '" + nameFile + "'";
+         QString packet = "SMSФайл '" +  nameFile + "' не был сохранен  EOS";
         udpSocket->writeDatagram(packet.toUtf8(), QHostAddress::LocalHost, selectedPort);
     }
     return datagram;
@@ -108,8 +115,10 @@ void MainWindow::on_SendingData_clicked()//отправка
         messageQueue.push_back(text);
         if (messageQueue.size() == 1)
         {
+
             sentTextPackets = 0;
             numTextPackets = qCeil(static_cast<double>(text.size()) / packetsize);
+            sendingPackets(1);
             static QTimer textTimer;
             connect(&textTimer, &QTimer::timeout, this, [this]() {
                 sendingPackets(1);
@@ -133,12 +142,13 @@ void MainWindow::on_selectFile_clicked()//выборка и отправка ф�
             QByteArray fileData = file.readAll();//чтение
             QFileInfo fileInfo(file.fileName());
             QString fileName = fileInfo.fileName();
-            fileQueue.push_back(fileName.toUtf8() + "Ω" +  fileData);
-            filePackets = fileName.toUtf8() + "Ω" +  fileData;
+            fileQueue.push_back(QString::number(fileName.length()).toUtf8() + "Ω" + fileName.toUtf8() +  fileData.toBase64());
+            filePackets = QString::number(fileName.length()).toUtf8() + "Ω" + fileName.toUtf8() +  fileData.toBase64();
             if (fileQueue.size() == 1)
             {
                 sentFilePackets = 0;
                 numFilePackets = qCeil(static_cast<double>(filePackets.size()) / packetsize);
+                sendingPackets(2);
                 static QTimer fileTimer;
                 connect(&fileTimer, &QTimer::timeout, this, [this]() {
                     sendingPackets(2);
@@ -204,6 +214,8 @@ void MainWindow::sendingPackets(int choice)
                     packet += "EOF";
                 udpSocket->writeDatagram(packet, QHostAddress::LocalHost, selectedPort);
                 ++sentFilePackets;
+               updateLabel();
+
             }
             else
             {
@@ -281,3 +293,33 @@ void MainWindow::on_switchPacketSize_clicked()//изменение размер�
         ui->packetSizeLabel->setText("Рaзмер пакетов: " + QString::number(packetsize));
     }
 }
+
+void MainWindow::on_debugCheckBox_stateChanged(int arg1)
+{
+    if (arg1 == Qt::Checked)
+    {         
+        isDebug = true;
+        packetsize = 10;
+        ui->textEdit->append("<font color=#71aaeb>Размер пакетов изменен на: </font>" + QString::number(packetsize));
+        ui->packetSizeLabel->setText("Рaзмер пакетов: " + QString::number(packetsize));
+        frequency = 1000;
+        ui->textEdit->append("<font color=#71aaeb>Частота отправки изменена на: </font>" + QString::number(frequency));
+        ui->textEdit->append("<font color=#71aaeb>Порт изменяется автоматически</font>");
+        ui->frequencyLabel->setText("Частота отправки: " + QString::number(frequency));
+        ui->packetLabel->setVisible(true);
+        ui->packetLabel->setText("0 из 0");
+    }
+
+    else if (arg1 == Qt::Unchecked)
+    {
+        ui->packetLabel->setVisible(false);
+    }
+
+}
+
+
+void MainWindow::updateLabel()
+{
+    ui->packetLabel->setText(QString::number(sentFilePackets) + " из " + QString::number(numFilePackets));
+}
+

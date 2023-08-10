@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_MainWindow_t {
-    QByteArrayData data[17];
-    char stringdata0[254];
+    QByteArrayData data[20];
+    char stringdata0[301];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -42,21 +42,25 @@ QT_MOC_LITERAL(7, 61, 11), // "QByteArray&"
 QT_MOC_LITERAL(8, 73, 8), // "datagram"
 QT_MOC_LITERAL(9, 82, 14), // "sendingPackets"
 QT_MOC_LITERAL(10, 97, 6), // "choise"
-QT_MOC_LITERAL(11, 104, 22), // "on_SendingData_clicked"
-QT_MOC_LITERAL(12, 127, 21), // "on_selectFile_clicked"
-QT_MOC_LITERAL(13, 149, 27), // "on_selectPortButton_clicked"
-QT_MOC_LITERAL(14, 177, 21), // "on_pushButton_clicked"
-QT_MOC_LITERAL(15, 199, 27), // "on_switchPacketSize_clicked"
-QT_MOC_LITERAL(16, 227, 26) // "on_selectFrequency_clicked"
+QT_MOC_LITERAL(11, 104, 11), // "updateLabel"
+QT_MOC_LITERAL(12, 116, 22), // "on_SendingData_clicked"
+QT_MOC_LITERAL(13, 139, 21), // "on_selectFile_clicked"
+QT_MOC_LITERAL(14, 161, 27), // "on_selectPortButton_clicked"
+QT_MOC_LITERAL(15, 189, 21), // "on_pushButton_clicked"
+QT_MOC_LITERAL(16, 211, 27), // "on_switchPacketSize_clicked"
+QT_MOC_LITERAL(17, 239, 26), // "on_selectFrequency_clicked"
+QT_MOC_LITERAL(18, 266, 29), // "on_debugCheckBox_stateChanged"
+QT_MOC_LITERAL(19, 296, 4) // "arg1"
 
     },
     "MainWindow\0ReadingData\0\0CountingDate\0"
     "PhotoProfile\0a\0SaveFile\0QByteArray&\0"
     "datagram\0sendingPackets\0choise\0"
-    "on_SendingData_clicked\0on_selectFile_clicked\0"
-    "on_selectPortButton_clicked\0"
+    "updateLabel\0on_SendingData_clicked\0"
+    "on_selectFile_clicked\0on_selectPortButton_clicked\0"
     "on_pushButton_clicked\0on_switchPacketSize_clicked\0"
-    "on_selectFrequency_clicked"
+    "on_selectFrequency_clicked\0"
+    "on_debugCheckBox_stateChanged\0arg1"
 };
 #undef QT_MOC_LITERAL
 
@@ -66,7 +70,7 @@ static const uint qt_meta_data_MainWindow[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-      11,   14, // methods
+      13,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -74,17 +78,19 @@ static const uint qt_meta_data_MainWindow[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,   69,    2, 0x0a /* Public */,
-       3,    0,   70,    2, 0x0a /* Public */,
-       4,    1,   71,    2, 0x0a /* Public */,
-       6,    1,   74,    2, 0x0a /* Public */,
-       9,    1,   77,    2, 0x0a /* Public */,
-      11,    0,   80,    2, 0x08 /* Private */,
-      12,    0,   81,    2, 0x08 /* Private */,
-      13,    0,   82,    2, 0x08 /* Private */,
-      14,    0,   83,    2, 0x08 /* Private */,
-      15,    0,   84,    2, 0x08 /* Private */,
-      16,    0,   85,    2, 0x08 /* Private */,
+       1,    0,   79,    2, 0x0a /* Public */,
+       3,    0,   80,    2, 0x0a /* Public */,
+       4,    1,   81,    2, 0x0a /* Public */,
+       6,    1,   84,    2, 0x0a /* Public */,
+       9,    1,   87,    2, 0x0a /* Public */,
+      11,    0,   90,    2, 0x0a /* Public */,
+      12,    0,   91,    2, 0x08 /* Private */,
+      13,    0,   92,    2, 0x08 /* Private */,
+      14,    0,   93,    2, 0x08 /* Private */,
+      15,    0,   94,    2, 0x08 /* Private */,
+      16,    0,   95,    2, 0x08 /* Private */,
+      17,    0,   96,    2, 0x08 /* Private */,
+      18,    1,   97,    2, 0x08 /* Private */,
 
  // slots: parameters
     QMetaType::Void,
@@ -98,6 +104,8 @@ static const uint qt_meta_data_MainWindow[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void, QMetaType::Int,   19,
 
        0        // eod
 };
@@ -116,12 +124,14 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 3: { QByteArray _r = _t->SaveFile((*reinterpret_cast< QByteArray(*)>(_a[1])));
             if (_a[0]) *reinterpret_cast< QByteArray*>(_a[0]) = std::move(_r); }  break;
         case 4: _t->sendingPackets((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 5: _t->on_SendingData_clicked(); break;
-        case 6: _t->on_selectFile_clicked(); break;
-        case 7: _t->on_selectPortButton_clicked(); break;
-        case 8: _t->on_pushButton_clicked(); break;
-        case 9: _t->on_switchPacketSize_clicked(); break;
-        case 10: _t->on_selectFrequency_clicked(); break;
+        case 5: _t->updateLabel(); break;
+        case 6: _t->on_SendingData_clicked(); break;
+        case 7: _t->on_selectFile_clicked(); break;
+        case 8: _t->on_selectPortButton_clicked(); break;
+        case 9: _t->on_pushButton_clicked(); break;
+        case 10: _t->on_switchPacketSize_clicked(); break;
+        case 11: _t->on_selectFrequency_clicked(); break;
+        case 12: _t->on_debugCheckBox_stateChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
         default: ;
         }
     }
@@ -156,13 +166,13 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 11)
+        if (_id < 13)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 11;
+        _id -= 13;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 11)
+        if (_id < 13)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 11;
+        _id -= 13;
     }
     return _id;
 }
