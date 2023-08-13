@@ -77,12 +77,16 @@ QByteArray MainWindow::SaveFile(QByteArray& datagram)
 
     QByteArray aboba = datagram;
     int name = aboba.indexOf("Ω");
+    int len = 0;
 
     if (name != -1)
     {
-        nameFile = aboba.left(name);
-        aboba.remove(0, name + 1);
+        len = (aboba.left(name)).toInt();
+        aboba.remove(0, name + 2);
     }
+    nameFile = aboba.mid(0,len);
+    ui->textEdit->append(QString::number(len));
+    aboba.remove(0, len);
     aboba = QByteArray::fromBase64(aboba);
 
     QString SaveFilePath = QFileDialog::getSaveFileName(this, tr("Сохранить файл"), nameFile);
@@ -142,8 +146,10 @@ void MainWindow::on_selectFile_clicked()//выборка и отправка ф�
             QByteArray fileData = file.readAll();//чтение
             QFileInfo fileInfo(file.fileName());
             QString fileName = fileInfo.fileName();
-            fileQueue.push_back(QString::number(fileName.length()).toUtf8() + "Ω" + fileName.toUtf8() +  fileData.toBase64());
-            filePackets = QString::number(fileName.length()).toUtf8() + "Ω" + fileName.toUtf8() +  fileData.toBase64();
+            int len = (fileName.toUtf8()).size();
+            fileQueue.push_back(QString::number(len).toUtf8() + "Ω" + fileName.toUtf8() +  fileData.toBase64());
+            filePackets = QString::number(len).toUtf8() + "Ω" + fileName.toUtf8() +  fileData.toBase64();
+            ui->textEdit->append(QString::number(fileName.size()).toUtf8());
             if (fileQueue.size() == 1)
             {
                 sentFilePackets = 0;
