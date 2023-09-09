@@ -34,6 +34,8 @@ public slots:
     QByteArray SaveFile(QByteArray& datagram);
     void sendingPackets(int choise);
     void updateLabel();
+    void NumberPackets(QByteArray& datagram, int choice);
+    bool isAllPackets(int choice);
 
 
 
@@ -66,6 +68,11 @@ private:
     QQueue<QString> messageQueue;
     QQueue<QByteArray> fileQueue;
     bool isDebug = false;
+    QVector<QVector<QString>> resFilePackets;
+    QVector<QVector<QString>> resTextPackets;
+    int numberSmsPackets = 0;
+    int numberFilePackets = 0;
+    QVector<int> numberPackage;
 
 
 
