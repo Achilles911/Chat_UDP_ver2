@@ -49,13 +49,13 @@ void MainWindow::ReadingData()//вызывается при получении �
         NumberPackets(datagram, 1);
 
         if (QString(fileDatagram).endsWith("EOF", Qt::CaseInsensitive))
-        {   
+        {
             if (isAllPackets(1))
             {
                 fileDatagram = "";
                 for (int i = 0; i < resFilePackets[numberPackage[1]].size(); ++i){
                     fileDatagram += resFilePackets[numberPackage[1]][i];//тут все пакеты из массива передаются в датаграму
-                }//тут возможна ошибка, так как датаграма может быть заменена на новую информацию
+                }
                 datagram = SaveFile(fileDatagram); // сохранялка
                 resFilePackets[numberPackage[1]].clear();
                 ui->textEdit->append(photo + "<font color=#71aaeb>Получен файл: </font>" + "'" + nameFile + "'");
@@ -66,10 +66,16 @@ void MainWindow::ReadingData()//вызывается при получении �
                 QByteArray data;
                 QDataStream stream(&data, QIODevice::WriteOnly);
                 stream << numberPackage;
-                udpSocket->writeDatagram("DOZ" + data, QHostAddress::LocalHost, selectedPort);
+                udpSocket->writeDatagram("DOZ1" + data, QHostAddress::LocalHost, selectedPort);
             }
 
         }
+    }
+    else if (QString(datagram).startsWith("DOZ"))
+    {
+        datagram.remove(0, 3);
+        requestPackets(datagram);
+
     }
     else
     {
@@ -92,7 +98,7 @@ void MainWindow::ReadingData()//вызывается при получении �
                     receivedPacket = "";
                     for (int i = 0; i < resTextPackets[numberPackage[0]].size(); ++i){
                         receivedPacket += resTextPackets[numberPackage[0]][i];
-                    }//тут возможна ошибка, так как датаграма может быть заменена на новую информацию
+                    }
                     ui->textEdit->append(photo + "<font color=#71aaeb>Собеседник: </font>" + receivedPacket);
                     ui->textEdit->append(dateTime);
                     resTextPackets[numberPackage[0]].clear();
@@ -102,12 +108,40 @@ void MainWindow::ReadingData()//вызывается при получении �
                     QByteArray data;
                     QDataStream stream(&data, QIODevice::WriteOnly);
                     stream << numberPackage;
-                    udpSocket->writeDatagram("DOZ" + data, QHostAddress::LocalHost, selectedPort);
+                    udpSocket->writeDatagram("DOZ0" + data, QHostAddress::LocalHost, selectedPort);
                 }
 
             }
         }
     }
+}
+void MainWindow::requestPackets(QByteArray datagram)
+{
+
+    int choice = datagram[3];
+    datagram.remove(0, 1);
+    QDataStream stream(datagram);
+    QVector<int> needPackets;
+    stream >> needPackets;
+    if (choice)
+    {
+        for (int i = 0; i < needPackets.size(); ++i) {
+            for (int j = 0;j < needPackets[-1] ; ) {
+
+            }
+
+        }
+
+    }
+    else
+    {
+        datagram.remove(0, 1);
+        QDataStream stream(datagram);
+        QVector<int> intVector;
+        stream >> intVector;
+
+    }
+
 }
 
 void MainWindow::NumberPackets(QByteArray &datagram, int choice)
@@ -172,7 +206,6 @@ bool MainWindow::isAllPackets(int choice)
 QByteArray MainWindow::SaveFile(QByteArray& datagram)
 {
     //выявление имени и удаление имени из файла
-
     QByteArray aboba = datagram;
     int name = aboba.indexOf("Ω");
     int len = 0;
@@ -183,7 +216,6 @@ QByteArray MainWindow::SaveFile(QByteArray& datagram)
         aboba.remove(0, name + 2);
     }
     nameFile = aboba.mid(0,len);
-    ui->textEdit->append(QString::number(len));
     aboba.remove(0, len);
     aboba = QByteArray::fromBase64(aboba);
 
@@ -195,15 +227,15 @@ QByteArray MainWindow::SaveFile(QByteArray& datagram)
         {
             file.write(aboba);
             file.close();
-            QString packet = "SMSФайл '" +  nameFile + "' был сохранен  EOS";
-            udpSocket->writeDatagram(packet.toUtf8(), QHostAddress::LocalHost, selectedPort);
+            //            QString packet = "SMSФайл '" +  nameFile + "' был сохранен  EOS";
+            //            udpSocket->writeDatagram(packet.toUtf8(), QHostAddress::LocalHost, selectedPort);
         }
     }
-    else
-    {
-        QString packet = "SMSФайл '" +  nameFile + "' не был сохранен  EOS";
-        udpSocket->writeDatagram(packet.toUtf8(), QHostAddress::LocalHost, selectedPort);
-    }
+    //    else
+    //    {
+    //        QString packet = "SMSФайл '" +  nameFile + "' не был сохранен  EOS";
+    //        udpSocket->writeDatagram(packet.toUtf8(), QHostAddress::LocalHost, selectedPort);
+    //    }
     return datagram;
 }
 
@@ -323,7 +355,6 @@ void MainWindow::sendingPackets(int choice)
                 udpSocket->writeDatagram(packet, QHostAddress::LocalHost, selectedPort);
                 ++sentFilePackets;
                 updateLabel();
-                ui->textEdit->append(packet);
             }
             else
             {
